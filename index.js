@@ -10,7 +10,18 @@ const port = 7777;
 const IP = '192.168.1.4';
 
 app.use(express.json());
-app.use(cors());
+
+const whiteList = ['http://localhost:8080', 'https://myapp.co'];
+const options = {
+  origin: (origin, callback) => {
+    if (whiteList.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido'));
+    }
+  }
+}
+app.use(cors(options));
 
 app.get('/', (req, res) => {
   res.send('Hello, this my server in express');
