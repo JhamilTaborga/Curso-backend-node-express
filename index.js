@@ -1,5 +1,6 @@
 const express = require('express');
 const routerApi = require('./routes');
+const cors = require('cors');
 
 const { logErros, errorHandler, boomErrorHandler } = require('./middlewares/error.handler')
 
@@ -9,6 +10,7 @@ const port = 7777;
 const IP = '192.168.1.4';
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello, this my server in express');
