@@ -7,14 +7,15 @@ const { logErros, errorHandler, boomErrorHandler } = require('./middlewares/erro
 const app = express();
 const port = 7777;
 // Mi IP
-const IP = '192.168.1.4';
+const IP = '192.168.1.8';
 
 app.use(express.json());
 
-const whiteList = ['http://localhost:8080', 'https://myapp.co'];
+const whiteList = [`http://localhost:${port}`, `http://${IP}:${port}`];
 const options = {
   origin: (origin, callback) => {
-    if (whiteList.includes(origin)) {
+    console.log('HOLA, SOY EL ORIGIN:' + origin);
+    if (!origin || whiteList.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('No permitido'));
