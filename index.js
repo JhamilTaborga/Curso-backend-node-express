@@ -40,3 +40,5 @@ app.use(errorHandler);
 app.listen(port, () => {
   console.log('http://' + IP + ':' + port + '/');
 });
+
+module.exports = app;
