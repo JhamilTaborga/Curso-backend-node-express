@@ -13,10 +13,10 @@ class ProductsService {
     for (let i = 0; i < limit; i++) {
       this.products.push({
         // id: faker.datatype.uuid(), Este no funciona porque esta deprecated, es recomenddable usar uuid(), como vemos en lo siguiente
-        id: faker.string.uuid(),
+        id: faker.datatype.uuid(),
         name: faker.commerce.productName(),
         price: parseInt(faker.commerce.price(), 10),
-        image: faker.image.url(),
+        image: faker.image.imageUrl(),
         isBlock: faker.datatype.boolean(),
       });
     }
@@ -24,7 +24,7 @@ class ProductsService {
 
   async create(data) {
     const newProduct = {
-      id: faker.string.uuid(),
+      id: faker.datatype.uuid(),
       ...data,
     }
     this.products.push(newProduct);
