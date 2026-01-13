@@ -5,17 +5,14 @@ const cors = require('cors');
 const { logErros, errorHandler, boomErrorHandler } = require('./middlewares/error.handler')
 
 const app = express();
-const port = 7777;
-// Mi IP
-const IP = '192.168.1.8';
+const port = process.env.PORT || 7777;
 
 app.use(express.json());
 
-const whiteList = [`http://localhost:${port}`, `http://${IP}:${port}`];
+const whiteList = [`http://localhost:${port}`, `http://192.168.1.8:3000`];
 const options = {
   origin: (origin, callback) => {
-    console.log('HOLA, SOY EL ORIGIN:' + origin);
-    if (!origin || whiteList.includes(origin)) {
+    if (whiteList.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('No permitido'));
@@ -24,11 +21,11 @@ const options = {
 }
 app.use(cors(options));
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Hello, this my server in express');
 });
 
-app.get('/nueva-ruta', (req, res) => {
+app.get('/api/nueva-ruta', (req, res) => {
   res.send('Hola, soy una nueva ruta');
 });
 
@@ -39,7 +36,7 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log('http://' + IP + ':' + port + '/');
+  console.log('mi port' + port);
 });
 
 module.exports = app;
