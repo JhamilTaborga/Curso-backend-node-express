@@ -18,7 +18,7 @@ router.get('/filter', (req, res) => {
   res.send('Soy un filter');
 });
 
-//En el siguiente codigo usamos ":" esos dos puntos ":" significan que es un parametro.
+//En el siguiente codigo usamos ":" esos dos puntos ":" significan que es un parametro en la url.
 router.get('/:id',
   validatorHandler(getProductSchema, 'params'),
   async (req, res, next) => {

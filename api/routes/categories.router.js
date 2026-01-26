@@ -1,33 +1,59 @@
 const express = require('express');
 
+const CategoryService = require('./../services/categorie.service');
+const validatorHandler = require('./../middlewares/validator.handler');
+const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('./../schemas/category.schema');
+
 const router = express.Router();
-router.get('/', (req, res) => {
-  // const { categoryId } = req.params;
-  res.json([
-    {
-      category: 'clothes',
-      products: ['jeans', 'shoes', 'jacket']
+const service = new CategoryService();
 
-    },
-    {
-      category: 'electronics',
-      products: ['consoles', 'pc', 'monitor']
+router.get('/', async (req, res, next) => {
+  try {
+    const categories = await service.find();
+    res.json(categories);
+  } catch (error) {
+    next(error);
+  }
+});
 
-    },
-    {
-      category: 'miscellaneous',
-      products: ['table', 'guitar', 'catsand']
+router.get('/:id',
+   validatorHandler(getCategorySchema, 'params'),
+   async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const category = await service.findOne(id);
+    res.json(category);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/:id',
+  validatorHandler(createCategorySchema, 'params'),
+  validatorHandler(updateCategorySchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const category = await service.update(id, body);
+      res.join(category);
+    } catch (error) {
+      next(error);
     }
-  ]);
-});
+  }
+);
 
-router.get('/:categoryId/products/:productId', (req, res) => {
-  const { categoryId, productId } = req.params;
-  res.json({
-    categoryId,
-    productId,
-  });
-});
-
+router.delete('/:id',
+  validatorHandler(getCategorySchema, 'params'),
+  async (req, res, mext) => {
+    try {
+      const { id } = req.params;
+      await service.delete(id);
+      res.status(201).json({id});
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

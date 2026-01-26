@@ -1,27 +1,30 @@
-class UsersServices {
-  constructor() {
+const boom = require('@hapi/boom')
 
+class UserServices {
+  constructor() {}
+
+  async create(data) {
+    return data;
   }
 
-  create() {
-
+  async find() {
+    return [];
   }
 
-  find() {
-
+  async findOne(id) {
+    return { id }
   }
 
-  findOne() {
-
+  async update(id, changes) {
+    return {
+      id,
+      changes,
+    }
   }
 
-  update() {
-
-  }
-
-  delete() {
-
+  async delete(id) {
+    return { id }
   }
 }
 
-module.exports = UsersServices;
+module.exports = UserServices;
