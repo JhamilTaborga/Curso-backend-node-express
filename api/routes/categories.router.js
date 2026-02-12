@@ -29,14 +29,27 @@ router.get('/:id',
 });
 
 router.post('/:id',
-  validatorHandler(createCategorySchema, 'params'),
+  validatorHandler(createCategorySchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newCategory = await service.create(body);
+      res.status(201).json(newCategory);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.patch('/:id',
+  validatorHandler(getCategorySchema, 'params'),
   validatorHandler(updateCategorySchema, 'body'),
   async (req, res, next) => {
     try {
       const { id } = req.params;
       const body = req.body;
       const category = await service.update(id, body);
-      res.join(category);
+      res.json(category);
     } catch (error) {
       next(error);
     }
