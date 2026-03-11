@@ -23,8 +23,8 @@ const ProductSchema = {
     field: 'created_at',
     defaultValue: Sequelize.NOW
   },
-  onUpdate: 'CASCADE',
-  onDelete: 'SET NULL'
+  // onUpdate: 'CASCADE',
+  // onDelete: 'SET NULL'
 }
 
 class Product extends Model {
