@@ -5,12 +5,27 @@ class CustomerServices {
   constructor() {}
 
   async create(data) {
-    const newCustomer = await models.Customer.create(data);
+    // Esta es una forma declarativa que tenemos de anidar, manualmente, nuestro usuario creado con el customer y poder crear ambas
+    // al mismo tiempo, pero sequealize nos ayuda a realizar esta misma acción con menos líneas de código
+/*     const newUser = await models.User.create(data.user)
+    const newCustomer = await models.Customer.create({
+      ...data,
+      userId: newUser.id
+    });
+    return newCustomer; */
+
+    // Código usando Sequelize: Ya que sequealize guarda en memoria los datos que agregamos en customer.model podemos pasarle
+    //"data" a este método y lo relacioanará con "user", como también lo tenemos anidado, sequelize lee la información y la anida acá.
+    const newCustomer = await models.Customer.create(data, {
+      include: ['user']
+    });
     return newCustomer;
   }
 
   async find() {
-    const rta= await models.Customer.findAll();
+    const rta= await models.Customer.findAll({
+      include: ['user']
+    });
     return rta;
   }
 
