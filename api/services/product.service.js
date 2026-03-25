@@ -6,8 +6,7 @@ const { models } = require('../../libs/sequelize');
 class ProductsService {
 
   constructor() {
-    this.products = [];
-    this.generate();
+    // this.generate();
   }
 
   async generate() {
@@ -25,51 +24,35 @@ class ProductsService {
   }
 
   async create(data) {
-    const newProduct = {
-      id: faker.datatype.uuid(),
-      ...data,
-    }
-    this.products.push(newProduct);
+    const newProduct = await models.Product.create(data)
     return newProduct;
   }
 
   async find() {
-    const rta = await models.Product.findAll();
-    return rta;
+    const products = await models.Product.findAll({
+      include: ['category']
+    });
+    return products;
   }
 
   async findOne(id) {
-    // const name = this.getTotal();
-    const product = this.products.find(item => item.id === id);
+    const product = await models.Product.findByPk(id);
     if (!product) {
       throw boom.notFound('Product not found');
-    }
-    if (product.isBlock) {
-      throw boom.conflict('Product is block');
     }
     return product;
   }
 
   async update(id, changes) {
-    const index = this.products.findIndex(item => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('Product not found');
-    }
-    const product = this.products[index];
-    this.products[index] = {
-      ...product,
-      ...changes
-    };
-    return this.products[index];
+    const product = await this.findOne(id);
+    const rta = await product.update(changes);
+    return(rta);
   }
 
   async delete(id) {
-    const index = this.products.findIndex(item => item.id === id);
-    if (index === -1) {
-      throw boom.notFound('Product not found');
-    }
-    this.products.splice(index, 1);
-    return { id };
+    const product = await this.findOne(id);
+    await product.destroy();
+    return { rta: true }
   }
 }
 

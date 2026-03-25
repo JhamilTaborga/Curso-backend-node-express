@@ -37,7 +37,7 @@ router.get('/:id',
 
 router.post('/',
   validatorHandler(createProductSchema, 'body'),
-  async (req, res) => {
+  async (req, res, next) => {
     try{
       const body = req.body;
       const newProduct = await service.create(body);

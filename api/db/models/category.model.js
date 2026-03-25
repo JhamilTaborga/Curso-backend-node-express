@@ -18,7 +18,7 @@ const CategorySchema = {
     allowNull: false,
     type: DataTypes.STRING
   },
-  createAt: {
+  createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
@@ -40,7 +40,7 @@ class Category extends Model {
       sequelize,
       tableName: CATEGORY_TABLE,
       modelName: 'Category',
-      timestamp: false
+      timestamps: false
     }
   }
 }
