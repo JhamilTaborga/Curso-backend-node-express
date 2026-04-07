@@ -10,7 +10,8 @@ module.exports = {
     dialect: config.dbEngine,
     dialectOptions: {
       ssl: {
-        rejectUnauthorized: false,
+        require: true,
+        rejectUnauthorized: false
       }
     }
   }
