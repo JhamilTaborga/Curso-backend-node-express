@@ -1,4 +1,5 @@
 'use strict';
+const { DataTypes, Sequelize } = require('sequelize');
 
 const { UserSchema, USER_TABLE } = require('./../models/user.model');
 const { CustomerSchema, CUSTOMER_TABLE } = require('./../models/customer.model');
