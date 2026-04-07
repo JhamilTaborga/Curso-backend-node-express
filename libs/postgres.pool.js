@@ -17,6 +17,7 @@ if(config.isProd) {
 const pool = new Pool({
   connectionString: URI,
   ssl: {
+    require: true,
     rejectUnauthorized: false,
   },
  });

@@ -8,10 +8,14 @@ const options = {
 }
 
 if(config.isProd) {
-  options.ssl = {
-    rejectUnauthorized: false,
-  },
-  options.dialectModule = require('pg');
+  options.dialectModule = require('pg')
+  options.dialectOptions = {
+    ssl: {
+
+      require: true,
+      rejectUnauthorized: false,
+    }
+  }
 }
 
 const sequelize = new Sequelize(config.dbUrl, options);
