@@ -6,6 +6,7 @@ const config = {
   port: process.env.PORT || 7777,
   dbEngine: process.env.DB_ENGINE,
   dbUrl: process.env.DATABASE_URL,
+  apiKey: process.env.API_KEY,
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
   dbHost: process.env.DB_HOST,
