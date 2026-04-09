@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+const bcrypt = require('bcrypt');
 const { models } = require('../../libs/sequelize');
 
 class CustomerServices {
@@ -16,9 +17,20 @@ class CustomerServices {
 
     // Código usando Sequelize: Ya que sequealize guarda en memoria los datos que agregamos en customer.model podemos pasarle
     //"data" a este método y lo relacioanará con "user", como también lo tenemos anidado, sequelize lee la información y la anida acá.
-    const newCustomer = await models.Customer.create(data, {
+
+    const hash = await bcrypt.hash(data.user.password, 10);
+    const newData = {
+      ...data,
+      user: {
+        ...data.user,
+        password: hash
+      }
+    }
+    const newCustomer = await models.Customer.create(newData, {
       include: ['user']
     });
+    //En el siguiente código vemos la forma de eliminar del output el hash que creamos en customer, como está anidado con user debemos hacerlo así:
+    delete newCustomer.dataValues.user.dataValues.password;
     return newCustomer;
   }
 

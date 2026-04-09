@@ -1,4 +1,5 @@
-const boom = require('@hapi/boom')
+const boom = require('@hapi/boom');
+const bcrypt = require('bcrypt');
 
 const { models } = require('../../libs/sequelize');
 
@@ -7,7 +8,13 @@ class UserServices {
   constructor() {}
 
   async create(data) {
-    const newUser = await models.User.create(data);
+    const hash = await bcrypt.hash(data.password, 10);
+    const newUser = await models.User.create({
+      ...data,
+      password: hash
+    });
+    // delete newUser.password; Esta sería la forma de eliminar del output el hash que creamos pero como estamos usando sequelize debemos hacerlo de la siguiente manera:
+    delete newUser.dataValues.password;
     return newUser;
   }
 
