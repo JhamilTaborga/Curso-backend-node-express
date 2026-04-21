@@ -10,4 +10,27 @@ function checkApiKey(req, res, next) {
   }
 }
 
-module.exports = { checkApiKey }
+//Este es un middleware para un rol en específicio:
+function checkAdminRole (req, res, next) {
+  console.log(req.user);
+  const user = req.user;
+  if(user.role === 'admin') {
+    next();
+  } else {
+    next(boom.forbidden('Se requiren permisos de administrador.'));
+  }
+}
+
+//Este es un middleware para validar varios roles:
+function checkRoles (...roles) {
+  return (req, res, next) => {
+    const user = req.user;
+    if (roles.includes(user.role)) {
+      next();
+    } else {
+      next(boom.forbidden('Se require permisos de administrador.'))
+    }
+  }
+}
+
+module.exports = { checkApiKey, checkAdminRole, checkRoles }
