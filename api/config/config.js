@@ -13,6 +13,7 @@ const config = {
   dbName: process.env.DB_NAME,
   dbPort: process.env.DB_PORT,
   jwtSecret: process.env.JWT_SECRET,
+  jwtSecretRecovery: process.env.JWT_SECRET_RECOVERY,
   googleMail: process.env.GOOGLE_MAIL,
   googlePass: process.env.GOOGLE_PASS,
 }

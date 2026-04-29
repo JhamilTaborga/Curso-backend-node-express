@@ -33,35 +33,41 @@ class AuthService {
     };
   }
 
-  async sendMail(email) {
+  async sendRecovery(email) {
     const user = await service.findByEmail(email);
     if(!user) {
       throw boom.unauthorized();
     }
+    const payload = { sub: user.id }
+    const token = jwt.sign(payload, config.jwtSecretRecovery, { expiresIn: '15min'});
+    const link = `http://myfrontend.com/recovery?token=${token}`;
+console.log('Changes object:', { recoveryToken: token })
+    await service.update(user.id, { recoveryToken: token });
+    const mail = {
+      from: `${config.googleMail}`,
+      to: `${user.email}`,
+      subject: "Email para recuperar contraseña",
+      html: `<b>Ingresa a este link => ${link}</b>`,
+    }
+    const rta = await this.sendMail(mail);
+    console.log('Resultado Sequelize (DataValues):', rta.dataValues);
+    return rta;
+  }
+
+  async sendMail(infoMail) {
+
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
-      secure: true, // use STARTTLS (upgrade connection to TLS after connecting)
+      secure: true,
       auth: {
         user: config.googleMail,
         pass: config.googlePass
       }
     });
 
-    try {
-      const info = await transporter.sendMail({
-        from: `${config.googleMail}`, // sender address
-        to: `${user.email}`, // list of recipients
-        subject: "Hello, this is another message", // subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // HTML body
-      });
-
-      console.log("Message sent: %s", info.messageId);
-      return { message: 'mail send' };
-    } catch (err) {
-      console.error("Error while sending mail:", err);
-    }
+    await transporter.sendMail(infoMail);
+    return { message: 'mail sent' };
   }
 }
 
