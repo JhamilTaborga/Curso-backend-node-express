@@ -18,6 +18,7 @@ class AuthService {
       throw boom.unauthorized();
     }
     delete user.dataValues.password;
+    delete user.dataValues.recoveryToken;
     return user;
   }
 
@@ -41,7 +42,6 @@ class AuthService {
     const payload = { sub: user.id }
     const token = jwt.sign(payload, config.jwtSecretRecovery, { expiresIn: '15min'});
     const link = `http://myfrontend.com/recovery?token=${token}`;
-console.log('Changes object:', { recoveryToken: token })
     await service.update(user.id, { recoveryToken: token });
     const mail = {
       from: `${config.googleMail}`,
@@ -50,8 +50,22 @@ console.log('Changes object:', { recoveryToken: token })
       html: `<b>Ingresa a este link => ${link}</b>`,
     }
     const rta = await this.sendMail(mail);
-    console.log('Resultado Sequelize (DataValues):', rta.dataValues);
     return rta;
+  }
+
+  async changePassword(token, newPassword) {
+    try {
+      const payload = jwt.verify(token, config.jwtSecretRecovery);
+      const user = await service.findOne(payload.sub);
+      if(user.recoveryToken !== token) {
+        throw boom.unauthorized();
+      }
+      const hash = await bcrypt.hash(newPassword, 10);
+      await service.update(user.id, { recoveryToken: null, password: hash });
+      return { message: 'password changed' };
+    } catch(error) {
+      throw boom.unauthorized()
+    }
   }
 
   async sendMail(infoMail) {
