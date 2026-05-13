@@ -71,7 +71,12 @@ class OrderService{
   }
 
   async delete(id) {
-    return { id };
+    const order = await this.findOne(id);
+    await models.OrderProduct.destroy({
+      where: { orderId: id }
+    })
+    await order.destroy();
+    return { id }
   }
 }
 

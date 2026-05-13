@@ -38,6 +38,7 @@ class CustomerServices {
     const rta= await models.Customer.findAll({
       include: ['user']
     });
+    rta.forEach(customer => { delete customer.dataValues.user.dataValues.password })
     return rta;
   }
 
@@ -46,6 +47,7 @@ class CustomerServices {
     if (!customer) {
       throw boom.notFound('Customer not found');
     }
+    delete customer.dataValues.password;
     return customer;
   }
 

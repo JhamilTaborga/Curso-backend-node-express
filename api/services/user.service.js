@@ -22,6 +22,8 @@ class UserServices {
     const rta = await models.User.findAll({
       include: ['customer']
     });
+    // delete rta.dataValues.password;
+    rta.forEach(usr => { delete usr.dataValues.password });
     return rta;
   }
 
@@ -37,6 +39,7 @@ class UserServices {
     if (!user) {
       throw boom.notFound('User not found');
     }
+    delete user.dataValues.password;
     return user;
   }
 

@@ -16,6 +16,12 @@ const config = {
   jwtSecretRecovery: process.env.JWT_SECRET_RECOVERY,
   googleMail: process.env.GOOGLE_MAIL,
   googlePass: process.env.GOOGLE_PASS,
+  name: process.env.NAME,
+  lastname: process.env.LASTNAME,
+  phone: process.env.PHONE,
+  gmail: process.env.GMAIL,
+  password: process.env.PASSWORD,
+  role: process.env.ROLE
 }
 
 module.exports = { config };

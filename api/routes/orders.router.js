@@ -57,5 +57,18 @@ router.post('/add-item',
     }
   }
 );
+// Debo proteger esta ruta para que solo pueda elimanar una orden un Admin.
+router.delete('/:id',
+  validatorHandler(getOrderSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const rta = await service.delete(id);
+      res.status(201).json(rta);
+    } catch(error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
