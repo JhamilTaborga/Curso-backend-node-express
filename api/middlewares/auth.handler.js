@@ -12,7 +12,6 @@ function checkApiKey(req, res, next) {
 
 //Este es un middleware para un rol en específicio:
 function checkAdminRole (req, res, next) {
-  console.log(req.user);
   const user = req.user;
   if(user.role === 'admin') {
     next();
