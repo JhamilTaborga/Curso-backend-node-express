@@ -34,6 +34,11 @@ const UserSchema = {
     type: DataTypes.DATE,
     field: 'create_at', //field: nos ayuda a renombrar la seccion en sql, en lugar de "createrAt" que está en camelCase lo crea con el nombre que le pasamos en field.
     defaultValue: Sequelize.NOW
+  },
+  recoveryToken: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    field: 'recovery_token'
   }
 }
 

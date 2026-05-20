@@ -2,7 +2,11 @@ const { config } = require('../config/config');
 
 module.exports = {
   development: {
-    url: config.dbUrl,
+    username: config.dbUser,
+    password: config.dbPassword,
+    database: config.dbName,
+    host: config.dbHost,
+    port: config.dbPort,
     dialect: config.dbEngine,
   },
   production: {
